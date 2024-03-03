@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <link rel="stylesheet" href="beauty.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      <h2>Feedback Form</h2>
+      <form id="feedbackForm">
+
+        <div class="input_box">
+          <input type="text" required id="name" name="name">
+          <label>Name</label>
+        </div>
+
+        <div class="input_box">
+          <input type="email" required id="email" name="email">
+          <label>Email</label>
+        </div>
+
+        <div class="input_box">
+          <textarea rows="5" required id="message" name="message"></textarea>
+          <label>Message</label>
+        </div>
+
+        <button class="button" type="submit">Submit</button>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Collect form data
+      const formData = new FormData(this);
+
+      // Send form data to server
+      fetch('/sendEmail', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to send email');
+        }
+        return response.text();
+      })
+      .then(data => {
+        alert(data); // Show success message
+        document.getElementById('feedbackForm').reset(); // Reset form
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to send email');
+      });
+    });
+  </script>
+</body>
+</html>
